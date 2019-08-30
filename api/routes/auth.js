@@ -39,7 +39,7 @@ router.post('/login', async (req, res, next) => {
 
 router.post('/signup', async (req, res, next) => {
   try {
-    const { first_name, last_name, email, password, type } = req.body
+    const { first_name, last_name, email, password } = req.body
     const rounds = 10
     const hashed = await bcrypt.hash(password, rounds)
 
@@ -52,7 +52,7 @@ router.post('/signup', async (req, res, next) => {
     }
 
     const status = 201
-    const user = await User.create({ first_name, last_name, email, password: hashed, type })
+    const user = await User.create({ first_name, last_name, email, password: hashed, type: 'STUDENT' })
     const token = generateToken(user._id)
     res.status(status).json({ status, token })
   } catch(e) {

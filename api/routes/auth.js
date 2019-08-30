@@ -31,7 +31,7 @@ router.post('/login', async (req, res, next) => {
     }
   }
 
-  const message = `Username or password incorrect. Please check credentials and try again.`
+  const message = `Email or password incorrect. Please check credentials and try again.`
   const error = Error(message)
   error.status = 401
   next(error)

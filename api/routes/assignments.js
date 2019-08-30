@@ -1,8 +1,6 @@
 const router = require('express').Router()
 const User = require('../models/user')
-const { isLoggedIn, isSameUser, isAdmin } = require('../middleware/auth')
-
-const excludeKeys = '-__v -password'
+const { isLoggedIn, isAdmin } = require('../middleware/auth')
 
 router.get('/ungraded', isLoggedIn, isAdmin, async (req, res, next) => {
   const status = 200

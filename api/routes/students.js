@@ -21,7 +21,7 @@ router.post('/:userId/assignments', isLoggedIn, isSameUser, async (req, res, nex
   try {
     const status = 201
     const { assignment_title, project_description, project_link } = req.body
-    const user = await User.findById(req.params.userId);
+    const user = await User.findById(req.params.userId).select(excludeKeys);
     user.assignments.push({assignment_title, project_description, project_link})
     const response = await user.save()
     res.status(status).json({status, response})
@@ -51,6 +51,20 @@ router.put('/:userId/assignments/:assignmentId', isLoggedIn, isSameUser, async (
   }
 })
 
+router.patch('/:userId/assignments/:assignmentId', isLoggedIn, isAdmin, async (req, res, next) => {
+  try {
+    const status = 200
+    const { grade, maxGrade } = req.body
+    const user = await User.findById(req.params.userId).select('assignments')
+    const assignment = user.assignments.id(req.params.assignmentId)
+    Object.assign(assignment, {grade, maxGrade})
+    const response = await user.save()
+    res.status(status).json({ status, response: response.assignments.id(req.params.assignmentId) })
+  } catch(e) {
+    next(e)
+  }
+})
+
 router.delete('/:userId/assignments/:assignmentId', isLoggedIn, isSameUser, async (req, res, next) => {
   try { 
     const status = 204
@@ -59,7 +73,7 @@ router.delete('/:userId/assignments/:assignmentId', isLoggedIn, isSameUser, asyn
     if(!assignment) return next({status: 404, message: 'Assignment not found.'})
     
     assignment.remove()
-    await user.save()
+    // await user.save()
     res.status(status).json({ status, response: 'Assignment deleted.' })
   } catch(e) {
     next(e)

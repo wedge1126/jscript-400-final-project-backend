@@ -67,13 +67,13 @@ router.patch('/:userId/assignments/:assignmentId', isLoggedIn, isAdmin, async (r
 
 router.delete('/:userId/assignments/:assignmentId', isLoggedIn, isSameUser, async (req, res, next) => {
   try { 
-    const status = 204
+    const status = 200
     const user = await User.findById(req.params.userId).select('assignments')
     const assignment = user.assignments.id(req.params.assignmentId)
     if(!assignment) return next({status: 404, message: 'Assignment not found.'})
     
     assignment.remove()
-    // await user.save()
+    await user.save()
     res.status(status).json({ status, response: 'Assignment deleted.' })
   } catch(e) {
     next(e)

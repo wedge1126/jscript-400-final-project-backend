@@ -41,7 +41,7 @@ router.post('/signup', async (req, res, next) => {
   try {
     const { first_name, last_name, email, password } = req.body
     const rounds = 10
-    const hashed = await bcrypt.hash(password, rounds)
+    const hashed = password.length > 7 ? await bcrypt.hash(password, rounds) : null
 
     const alreadyExists = await User.findOne({ email })
     if (alreadyExists) {

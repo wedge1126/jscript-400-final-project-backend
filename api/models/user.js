@@ -20,20 +20,20 @@ const assignmentSchema = mongoose.Schema({
 const userSchema = mongoose.Schema({
   first_name: {
     type: String,
-    required: true
+    required: [true, 'First Name is required.']
   },
   last_name: {
     type: String,
-    required: true
+    required: [true, 'Last Name is required.']
   },
   email: { 
     type: String, 
-    required: true,
-    match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+    required: [true, 'Email is required.'],
+    match: [/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/, 'Invalid Email.']
   },
   password: {
     type: String,
-    required: true
+    required: [true, 'Password must be at least 8 characters.']
   },
   type: { 
     type: String, 
